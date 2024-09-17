@@ -1,5 +1,17 @@
 import Fastify from 'fastify'
+import cookie from '@fastify/cookie'
 
-const fastify = Fastify()
+import { usersRoutes } from './routes/users'
+import { mealsRoutes } from './routes/meals'
 
-fastify.listen({ port: 3000 }, () => console.log('Running...'))
+export const fastify = Fastify()
+
+fastify.register(cookie)
+
+fastify.register(usersRoutes, {
+  prefix: 'users',
+})
+
+fastify.register(mealsRoutes, {
+  prefix: 'meals',
+})
