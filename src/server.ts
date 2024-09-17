@@ -1,5 +1,3 @@
-import 'dotenv/config'
-
 import { fastify } from './app'
 import { env } from './env'
 
