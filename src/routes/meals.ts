@@ -56,6 +56,7 @@ export async function mealsRoutes(app: FastifyInstance) {
       return reply.status(201).send()
     },
   )
+
   app.put(
     '/:id',
     { preHandler: [checkUserIdExists] },
@@ -79,8 +80,9 @@ export async function mealsRoutes(app: FastifyInstance) {
       return reply.status(204).send()
     },
   )
+
   app.delete(
-    '/',
+    '/:id',
     { preHandler: [checkUserIdExists] },
     async (request, reply) => {
       const { id } = mealParamsSchema.parse(request.params)
@@ -92,13 +94,15 @@ export async function mealsRoutes(app: FastifyInstance) {
       return reply.status(204).send()
     },
   )
+
   app.get('/', { preHandler: [checkUserIdExists] }, async (request, reply) => {
     const userId = request.cookies.userId
 
-    const mealList = knex('meals').where({ user_id: userId }).select()
+    const mealList = await knex('meals').where({ user_id: userId }).select()
 
     return reply.status(200).send({ mealList })
   })
+
   app.get(
     '/:id',
     { preHandler: [checkUserIdExists] },
@@ -107,7 +111,9 @@ export async function mealsRoutes(app: FastifyInstance) {
 
       const userId = request.cookies.userId
 
-      const mealData = knex('meals').where({ id, user_id: userId }).first()
+      const mealData = await knex('meals')
+        .where({ id, user_id: userId })
+        .first()
 
       return reply.status(200).send(mealData)
     },

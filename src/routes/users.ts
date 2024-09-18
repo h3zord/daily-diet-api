@@ -17,8 +17,6 @@ export async function usersRoutes(app: FastifyInstance) {
 
     const userId = randomUUID()
 
-    console.log(userId)
-
     await knex('users').insert({
       id: userId,
       first_name: firstName,
@@ -31,7 +29,7 @@ export async function usersRoutes(app: FastifyInstance) {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
     })
 
-    reply.status(201).send()
+    return reply.status(201).send()
   })
 
   app.get('/:id', async (request, reply) => {
